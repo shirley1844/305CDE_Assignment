@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+
+//=================Scripts=========
+$(document).ready(function() {
+	
+$("#submit").on('click',function() {
+    var username=$("#username").val();
+    var pass1=$("#password").val();
+    var pass2=$("#repassword").val();
+	var email=$("#email").val();
+
+	
+	if(pass1==pass2){
+	}else{
+		alert("The passwords don't match.");
+	    return;	
+	}
+	
+	
+    var myData = 'username='+username+'&pass='+pass1;
+	 		
+        $.ajax({
+  		  	 url:'acc.php',
+  			   type:"POST",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+				alert(msg);
+				
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+//===========================login==========================
+$("#loginb").on('click',function() {
+    var username=$("#loginusername").val();
+    var pass=$("#loginpassword").val();
+
+	
+    var myData = 'username='+username+'&pass='+pass;
+	 		
+        $.ajax({
+  		  	 url:'acc.php',
+  			   type:"GET",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+    				alert(msg);
+					if (msg == "Login success"){
+					$.mobile.changePage( "#editp", {
+  transition: "pop",
+  reverse: false,
+  changeHash: false
+});
+}
+
+
+        
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});	
+//==============Change Password===============
+$("#update").on('click',function() {
+
+     var username=$("#updateusername").val();
+    var oldpass=$("#updateoldpassword").val();
+	var newpass=$("#updatenewpassword").val();
+	
+    var myData = 'username='+username+'&oldpass='+oldpass+'&newpass='+newpass;
+	 			
+        $.ajax({
+  		  	 url:'acc.php',
+  			   type:"PUT",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+    				alert(msg);
+        
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+
+//==============Delete Account===============
+$("#delacc").on('click',function() {
+
+    var delid=$("#deleteusername").val();
+	var delpass=$("#deletepassword").val();
+	    var myData = 'username='+delid+'&password='+delpass;
+	
+              
+        $.ajax({
+          url:'acc.php',
+          type:"DELETE",
+          dataType : 'text',
+          data:myData,
+        success: function(msg, status){
+            alert(msg);
+           
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+//=============Enquiry=======================
+$("#search").on("click", function() {
+//alert("pressed");
+  $.ajax({
+    type: "POST",
+    data: {
+      "prod": $("#eprod").val()
+	 
+    },
+    url: "data.php",
+    dataType: "json",
+    success: function(JSONObject) {
+      var list_HTML = "";
+      // Loop through Object and create list_HTML
+      for (var key in JSONObject) {
+        if (JSONObject.hasOwnProperty(key)) {
+          list_HTML += "<tr>";
+            list_HTML += "<td>" + "&nbsp;" +JSONObject[key]["prod"] + "&nbsp;" + "</td>";
+            list_HTML += "<td>" + "&nbsp;" +JSONObject[key]["type"] + "&nbsp;" + "</td>";
+          list_HTML += "</tr>";
+        }
+		
+      }
+
+
+      // Replace tableˇs tbody html with list_HTML
+      $("#pdlist tbody").html(list_HTML);
+	if (list_HTML == ""){
+alert("Item not found.");
+}
+	  
+    }
+  });
+});
+
+
+//============Add Item================
+$("#addprod").on('click',function() {
+    var prod=$("#prod").val();
+    var type=$("#type").val();
+  
+	
+    var myData = 'prod='+prod+'&type='+type;
+	 		
+        $.ajax({
+  		  	 url:'item.php',
+  			   type:"POST",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+				alert(msg);
+				
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+//============Update Item================
+$("#updtprod").on('click',function() {
+    var prod=$("#prod").val();
+    var type=$("#type").val();
+  
+	
+    var myData = 'prod='+prod+'&type='+type;
+	 		
+        $.ajax({
+  		  	 url:'item.php',
+  			   type:"PUT",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+				alert(msg);
+				
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+//============Delete Item================
+$("#delprod").on('click',function() {
+    var prod=$("#prod").val();
+    var type=$("#type").val();
+  
+	
+    var myData = 'prod='+prod+'&type='+type;
+	 		
+        $.ajax({
+  		  	 url:'item.php',
+  			   type:"DELETE",
+           dataType : 'text',
+  			   data:myData,
+        success: function(msg, status){
+				alert(msg);
+				
+                },
+                 error:function(xhr, ajaxOptions, thrownError){
+                    alert(xhr.status);
+                    alert(thrownError);
+                 }
+            });
+   
+});
+
+
+
+});
+</script>
+</head>
+
+<body>
+
+
+
+<div data-role="page" id="homep">
+  <div data-role="header">
+
+    <h1>Recycle Helper</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <h2>Welcome! This app can help you on recycling resources.</h2>
+    <a href="#viewp" class="ui-btn ui-btn-inline">Enquiry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+Search items.
+</br>
+<a href="#loginp" class="ui-btn ui-btn-inline">Edit items&nbsp;&nbsp;&nbsp;&nbsp;</a>
+Add or delete items.
+</br>
+<a href="#infop" class="ui-btn ui-btn-inline">More Info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+See more information of environmental protection.
+</br>
+<a href="#magp" class="ui-btn ui-btn-inline">Manage Account</a>
+Register, change password or delete account.
+  </div>
+
+</div>
+
+
+<div data-role="page" id="loginp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Login</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Please enter your username and password.&nbsp; &nbsp;    <a href="#regp">register -></a></b></p> <br><br>
+    Username: <input type="text" id="loginusername"><br>
+    Password: <input type="password" id="loginpassword"><br>
+
+
+<button id="loginb">Login</button>
+  </div>
+</div>
+
+<div data-role="page" id="editp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Edit</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Edit items.</b></p>
+	
+		Prudoct Name: <input type="text" id="prod"><br>
+		Material Type: <input type="text" id="type"><br>
+
+
+<button id="addprod">Add Item</button>
+<button id="updtprod">Change Material Type</button>
+<button id="delprod">Delete Item</button>
+    
+  </div>
+</div>
+
+<div data-role="page" id="infop">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Information</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Resin identification code of plastic</b></p>
+    <table id="infot" border = "1">
+  <tr>
+    <th>&nbsp;&nbsp;&nbsp;Material&nbsp;&nbsp;&nbsp;</th>
+    <th>&nbsp;Icon&nbsp;</th> 
+    <th>&nbsp;Polymer Name&nbsp;</th>
+	<th>&nbsp;Uses&nbsp;</th>
+  </tr>
+  <tr>
+    <td valign="middle" align = "center">&nbsp;PETE/PET&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Plastic-recyc-01.svg/100px-Plastic-recyc-01.svg.png" alt="PET" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Polyethylene terephthalate&nbsp;</td>
+	<td valign="middle" >&nbsp;Polyester fibers (Polar Fleece), thermoformed sheet, strapping, soft drink bottles, tote bags, furniture, carpet, paneling and (occasionally) new containers.&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;HDPE/PE-HD&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Plastic-recyc-02.svg/100px-Plastic-recyc-02.svg.png" alt="PE-HD" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;High-density polyethylene&nbsp;</td>
+	<td valign="middle" >&nbsp;Bottles, grocery bags, milk jugs, recycling bins, agricultural pipe, base cups, car stops, playground equipment, and plastic lumber.&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;PVC/V&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Plastic-recyc-03.svg/100px-Plastic-recyc-03.svg.png" alt="PVC" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Polyvinyl chloride&nbsp;</td>
+	<td valign="middle" >&nbsp;Pipe, Window profile, Siding, fencing, flooring, shower curtains, lawn chairs, non-food bottles and children's toys.&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;LDPE/PE-LD&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Plastic-recyc-04.svg/100px-Plastic-recyc-04.svg.png" alt="PE-LD" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Low-density polyethylene&nbsp;</td>
+	<td valign="middle" >&nbsp;Plastic bags, 6 pack rings, various containers, dispensing bottles, wash bottles, tubing, and various molded laboratory equipment.&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;PP&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Plastic-recyc-05.svg/100px-Plastic-recyc-05.svg.png" alt="PP" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Polypropylene&nbsp;</td>
+	<td valign="middle" >&nbsp;Auto parts, industrial fibers, food containers, and dishware.&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;PS&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Plastic-recyc-06.svg/100px-Plastic-recyc-06.svg.png" alt="PS" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Polystyrene&nbsp;</td>
+	<td valign="middle" >&nbsp;Desk accessories, cafeteria trays, plastic utensils, toys, video cassettes and cases, clamshell containers, packaging peanuts, and insulation board and other expanded polystyrene products (e.g., Styrofoam).&nbsp;</td>
+  </tr>
+    <tr>
+    <td valign="middle" align = "center">&nbsp;OTHER/O&nbsp;</td>
+    <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Plastic-recyc-07.svg/100px-Plastic-recyc-07.svg.png" alt="O" style="width:50px;height:50px;"></td> 
+    <td valign="middle" >&nbsp;Other plastics, such as acrylic, <br>&nbsp;nylon, polycarbonate, <br>&nbsp;and polylactic acid (a bioplastic), <br>&nbsp;and multilayer combinations of <br>&nbsp;different plastics&nbsp;</td>
+	<td valign="middle" >&nbsp;Bottles, plastic lumber applications, headlight lenses, and safety shields/glasses.&nbsp;</td>
+  </tr>
+</table>
+  </div>
+</div>
+
+<div data-role="page" id="regp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Register</h1>
+
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Please provide the following information for register.</b></p>
+	<br><br>
+		Username: <input type="text" id="username"><br>
+Password: <input type="password" id="password"><br>
+Reenter Password: <input type="password" id="repassword"><br>
+Email: <input type="text" id="email"><br>
+
+<button id="submit">Save</button>
+<br><br><br><br>
+    
+  </div>
+</div>
+
+<div data-role="page" id="pswp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Register</h1>
+
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Please enter the old password and new password to change your password.</b></p><br>
+	Username: <input type="text" id="updateusername"><br>
+Old Password: <input type="password" id="updateoldpassword"><br>
+New Password: <input type="password" id="updatenewpassword"><br>
+
+
+<button id="update">Change Password</button>
+
+
+<br><br><br><br>
+    
+  </div>
+</div>
+
+<div data-role="page" id="magp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Manage Account</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+  <a href="#regp" class="ui-btn ui-btn-inline">Register</a>
+
+</br>
+    <a href="#pswp" class="ui-btn ui-btn-inline">Change Password</a>
+
+</br>
+<a href="#delp" class="ui-btn ui-btn-inline">Delete Account</a>
+
+</br>
+
+
+
+  </div>
+
+</div>
+
+
+<div data-role="page" id="delp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Delete Account</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+<font size="4" color="red">You are going to delete your account!</font> <br><br>
+    Username: <input type="text" id="deleteusername"><br>
+	Password: <input type="password" id="deletepassword"><br>
+
+<button id="delacc">Delete Account</button>
+  </div>
+</div>
+
+<div data-role="page" id="viewp">
+  <div data-role="header">
+<a href="#homep" class="ui-btn ui-btn-left ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Enquiry</h1>
+  </div>
+
+  <div data-role="main" class="ui-content">
+
+    <p><b>Search for items.</b></p><br>
+	    Product Name: <input type="text" id="eprod"><br>
+
+<button id="search">Search</button>
+<br>
+	<table id="pdlist" border="1">
+  <thead>
+    <th>&nbsp;Product&nbsp;</th>
+    <th>&nbsp;Material&nbsp;</th>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
+    
+  </div>
+</div>
+
+
+</body>
+</html>
